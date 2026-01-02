@@ -16,6 +16,8 @@ export class SeedService {
   private readonly axiosInstance: AxiosInstance = axios;
 
   async runSeed() {
+    await this.pokemonModel.deleteMany({});
+
     const { data } = await this.axiosInstance.get<IPokeAPIResponse>(
       'https://pokeapi.co/api/v2/pokemon?limit=200',
     );
