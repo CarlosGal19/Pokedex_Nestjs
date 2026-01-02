@@ -15,6 +15,6 @@ import { MongooseModule } from '@nestjs/mongoose';
       },
     ]),
   ],
-  exports: [PokemonService],
+  exports: [MongooseModule], // This allows use the mongoose models in other modules
 })
 export class PokemonModule {}
