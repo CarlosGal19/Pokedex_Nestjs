@@ -21,7 +21,7 @@
 ```
 5. Populate DB visiting
 ```
-  http://localhost:3000/seed
+  http://localhost:3000/api/v1/seed
 ```
 ## STACK
 <p align="left">
