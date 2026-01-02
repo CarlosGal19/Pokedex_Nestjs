@@ -9,6 +9,7 @@ import { isValidObjectId, Model } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import axios, { AxiosInstance } from 'axios';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class PokemonService {
@@ -38,18 +39,18 @@ export class PokemonService {
     }
   }
 
-  async findAll(page: number) {
+  async findAll(paginationData: PaginationDto) {
     const pokemons = await this.pokemonModel
       .find()
       .select('_id name no')
       .limit(this.perPage)
-      .skip((page - 1) * this.perPage);
+      .skip((paginationData.page - 1) * this.perPage);
 
     return {
       pokemons,
-      page,
+      page: paginationData.page,
       take: this.perPage,
-      skip: (page - 1) * this.perPage,
+      skip: (paginationData.page - 1) * this.perPage,
     };
   }
 
