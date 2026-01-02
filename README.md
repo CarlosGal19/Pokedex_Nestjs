@@ -19,7 +19,10 @@
 ```
   docker-compose up -d
 ```
-
+5. Populate DB visiting
+```
+  http://localhost:3000/seed
+```
 ## STACK
 <p align="left">
   <a href="https://skillicons.dev">
