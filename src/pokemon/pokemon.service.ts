@@ -120,4 +120,9 @@ export class PokemonService {
     }
     throw new InternalServerErrorException('Internal server error');
   }
+
+  async seedPokemons(pokemons: CreatePokemonDto[]) {
+    await this.pokemonModel.insertMany(pokemons);
+    return { msg: 'Pokemons added successfully' };
+  }
 }
