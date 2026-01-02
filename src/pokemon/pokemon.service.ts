@@ -8,6 +8,8 @@ import { CreatePokemonDto, UpdatePokemonDto } from './dto';
 import { isValidObjectId, Model } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
+import axios, { AxiosInstance } from 'axios';
+import { IPokeAPIResponse } from './interfaces/PokeApiResponse.interface';
 
 @Injectable()
 export class PokemonService {
@@ -17,6 +19,7 @@ export class PokemonService {
     private readonly pokemonModel: Model<Pokemon>,
   ) {}
 
+  private readonly axiosInstance: AxiosInstance = axios;
   private readonly perPage: number = 15;
 
   async create(createPokemonDto: CreatePokemonDto) {
@@ -121,8 +124,23 @@ export class PokemonService {
     throw new InternalServerErrorException('Internal server error');
   }
 
-  async seedPokemons(pokemons: CreatePokemonDto[]) {
-    await this.pokemonModel.insertMany(pokemons);
+  async seedPokemons() {
+    const { data } = await this.axiosInstance.get<IPokeAPIResponse>(
+      'https://pokeapi.co/api/v2/pokemon?limit=200',
+    );
+
+    const pokemons: { name: string; url: string }[] = data.results;
+
+    const transformedPokemons = pokemons.map((pokemon) => {
+      const pokemonUrl = pokemon.url.split('/');
+      return {
+        name: pokemon.name,
+        no: pokemonUrl[pokemonUrl.length - 2],
+      };
+    });
+
+    await this.pokemonModel.insertMany(transformedPokemons);
+
     return { msg: 'Pokemons added successfully' };
   }
 }
