@@ -19,7 +19,15 @@
 ```
   docker-compose up -d
 ```
-5. Populate DB visiting
+5. Clone __.env.example__ file and rename it as __.env__
+
+6. Fill the defined environment variables in __.env__ file
+
+7. Run the application
+```
+  pnpm run start:dev
+```
+8. Populate DB visiting
 ```
   http://localhost:3000/api/v1/seed
 ```
