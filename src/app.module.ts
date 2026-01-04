@@ -5,16 +5,19 @@ import { PokemonModule } from './pokemon/pokemon.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CommonModule } from './common/common.module';
 import { SeedModule } from './seed/seed.module';
+import { ConfigModule } from '@nestjs/config';
+import { envConfiguration } from './common/config/env.config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [envConfiguration],
+    }), // READ ENVIRONMENT VARIABLES
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
     PokemonModule,
-    MongooseModule.forRoot(
-      'mongodb://root:example@localhost:27017/pokedex-api?authSource=admin',
-    ),
+    MongooseModule.forRoot(process.env.MONGO_DB_URI || ''),
     CommonModule,
     SeedModule, // CONNECT TO MONGODB WITH MONGOOSE
   ],
