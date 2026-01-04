@@ -8,19 +8,20 @@ import { CreatePokemonDto, UpdatePokemonDto } from './dto';
 import { isValidObjectId, Model } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import axios, { AxiosInstance } from 'axios';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PokemonService {
+  private readonly perPage: number;
   constructor(
     // Due to Pokemon model is not injectable (because it is not a service) the InjectModel decorator is required
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>,
-  ) {}
-
-  private readonly axiosInstance: AxiosInstance = axios;
-  private readonly perPage: number = 15;
+    private readonly configService: ConfigService,
+  ) {
+    this.perPage = this.configService.getOrThrow<number>('default_limit');
+  }
 
   async create(createPokemonDto: CreatePokemonDto) {
     try {
