@@ -1,0 +1,31 @@
+services:
+  pokedexapi:
+    depends_on:
+      - mongo-pokedex
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pokedex-docker
+    container_name: pokedexapi
+    restart: always
+    ports:
+    - "${PORT}:${PORT}"
+    environment:
+      - MONGO_DB_URI=${MONGO_DB_URI}
+      - PORT=${PORT}
+      - DEFAULT_LIMIT=${DEFAULT_LIMIT}
+
+  mongo-pokedex:
+    image: mongo:8.2.3-noble
+    container_name: mongo-pokedex
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    volumes:
+      - nest-pokedex-data:/data/db
+
+volumes:
+  nest-pokedex-data:
