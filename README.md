@@ -37,3 +37,11 @@
     <img src="https://skillicons.dev/icons?i=ts,nodejs,pnpm,nest,mongodb,docker&perline=12" alt="IT SKILLS" />
   </a>
 </p>
+
+## Docker deployment
+1. Create __.env__ file
+2. Fill __.env__ file with environment variables
+3. Create image
+```
+  docker-compose -f docker-compose.dev.yaml --env-file .env up --build -d
+```
